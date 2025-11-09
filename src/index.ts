@@ -85,14 +85,17 @@ export interface ActorSets {
 /**
  * Main SupplyChain class for managing all entities
  */
-export class SupplyChain {
-  private lookup: import('./lookup.js').SupplyChainLookup;
-  private config: import('./config.js').SupplyChainConfig;
+import { SupplyChainLookup as LookupClass } from './lookup.js';
+import { defaultConfig as importedDefaultConfig, SupplyChainConfig } from './config.js';
 
-  constructor(config?: Partial<import('./config.js').SupplyChainConfig>) {
-    this.lookup = new (require('./lookup.js').SupplyChainLookup)();
+export class SupplyChain {
+  private lookup: LookupClass;
+  private config: SupplyChainConfig;
+
+  constructor(config?: Partial<SupplyChainConfig>) {
+    this.lookup = new LookupClass();
     this.config = { 
-      ...(require('./config.js').defaultConfig), 
+      ...importedDefaultConfig, 
       ...config 
     };
   }
@@ -100,14 +103,14 @@ export class SupplyChain {
   /**
    * Get the lookup service
    */
-  getLookup(): import('./lookup.js').SupplyChainLookup {
+  getLookup(): LookupClass {
     return this.lookup;
   }
 
   /**
    * Get the current configuration
    */
-  getConfig(): import('./config.js').SupplyChainConfig {
+  getConfig(): SupplyChainConfig {
     return this.config;
   }
 }

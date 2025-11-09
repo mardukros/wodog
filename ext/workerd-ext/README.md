@@ -2,6 +2,10 @@
 
 This directory contains comprehensive samples of using workerd extensions.
 
+## Examples
+
+### 1. Burrito Shop Example
+
 This example defines a fictional burrito shop extension in
 [burrito-shop.capnp](burrito-shop.capnp)
 and demonstrates following features:
@@ -10,14 +14,52 @@ and demonstrates following features:
   [worker.js](worker.js)
 - using internal modules to hide implementation details from the user: [kitchen.js](kitchen.js)
 
+### 2. Supply Chain Example
+
+This example defines a generic supply chain extension in
+[supply-chain.capnp](supply-chain.capnp)
+and demonstrates:
+
+- **Multi-actor system**: Suppliers, Producers, Distributors, Retailers
+- **Relationship management**: Active relationships between supply chain actors
+- **Dynamic lookups**: Query actors by type, name, cooperative membership
+- **Path finding**: Find supply chain paths between actors using BFS
+- **Internal modules**: Hide implementation details of actors, lookup, and supply chain logic
+- **Capability-based design**: Environment bindings provide secure access to supply chain data
+
+#### Supply Chain Files
+
+- **[supply-chain.capnp](supply-chain.capnp)**: Extension definition with modules
+- **[supply-chain.js](supply-chain.js)**: Public API module
+- **[supply-chain-impl.js](supply-chain-impl.js)**: Internal implementation (hidden)
+- **[actors.js](actors.js)**: Internal actor management (hidden)
+- **[lookup.js](lookup.js)**: Internal lookup service (hidden)
+- **[supply-chain-binding.js](supply-chain-binding.js)**: Binding module for environment initialization
+- **[supply-chain-worker.js](supply-chain-worker.js)**: Example worker demonstrating usage
+- **[supply-chain-config.capnp](supply-chain-config.capnp)**: Worker configuration
+- **[actors.json](actors.json)**: Sample actor data
+- **[relationships.json](relationships.json)**: Sample relationship data
+
 The sample will be extended as more functionality is implemented.
 
 ## Running
 
-```
+### Burrito Shop
+
+```bash
 $ bazel run //src/workerd/server:workerd -- serve $(pwd)/samples/extensions/config.capnp
 $ curl localhost:8080 -X POST -d 'veggie'
 9
+```
+
+### Supply Chain
+
+```bash
+$ bazel run //src/workerd/server:workerd -- serve $(pwd)/ext/workerd-ext/supply-chain-config.capnp
+$ curl localhost:8080/actors?type=supplier
+$ curl localhost:8080/actor/s1
+$ curl localhost:8080/path?from=s1&to=r1
+$ curl localhost:8080/query?name=Raw
 ```
 
 ## Demonstrated Methods
